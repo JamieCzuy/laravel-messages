@@ -24,9 +24,16 @@ These were the steps taken to create the initial commit: this is how the project
 
 See the Dockerfile and Compose.yml file for how these steps are defined.
 
-### Bring up a MySQL Database
+### Create a .env file from sample.env
 
-NOTE: The DB_PASSWORD environment variable must be set. It is used in few places!
+bash
+```
+cp sample.env .env
+```
+
+Now edit .env and replace ????'s with good passwords
+
+### Bring up a MySQL Database
 
 ```bash
 docker compose up -d mysql-db

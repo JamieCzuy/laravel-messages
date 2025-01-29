@@ -1,0 +1,68 @@
+services:
+
+  base-image:
+    build:
+      context: .
+      tags:
+        - base-php-image
+
+  mysql-db:
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    image: mysql:8.4.4
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./db_dump:/db_dump
+    networks:
+      - network
+    ports:
+      - ${DB_PORT}:3306
+
+  laravel-base: &laravel-base-app
+    image: base-php-image
+    depends_on:
+      - mysql-db
+    networks:
+      - network
+    volumes:
+      - ./${APP_FOLDER}:/${APP_FOLDER}
+    working_dir: /${APP_FOLDER}
+
+  laravel-app:
+    <<: *laravel-base-app
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    container_name: laravel_app
+    ports:
+      - ${APP_PORT}:8000
+
+  laravel-test:
+    <<: *laravel-base-app
+    command: php artisan test
+    container_name: laravel_test
+
+  project-create:
+    <<: *laravel-base-app  
+    command: >
+      /bin/bash -c "echo 'Creating Laravel Project including Breeze...';
+                    composer create-project laravel/laravel ${APP_FOLDER};
+                    cd /${APP_FOLDER};
+                    sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/g' .env;
+                    sed -i 's/# DB_HOST=127.0.0.1/DB_HOST=${DB_HOST}/g' .env;
+                    sed -i 's/# DB_PORT=.*$/DB_PORT=${DB_PORT}/g' .env;
+                    sed -i 's/# DB_DATABASE=.*$/DB_DATABASE=${DB_DATABASE}/g' .env;
+                    sed -i 's/# DB_USERNAME=.*$/DB_USERNAME=${DB_USERNAME}/g' .env;
+                    sed -i 's/# DB_PASSWORD=.*$/DB_PASSWORD=${DB_PASSWORD}/g' .env;
+                    composer require laravel/breeze --dev;
+                    php artisan breeze:install api;
+                    composer require pestphp/pest --dev --with-all-dependencies;
+                    ./vendor/bin/pest --init;
+                    echo 'Done creating Laravel Project'"
+    container_name: project_create
+    working_dir: /
+
+networks:
+  network: {}

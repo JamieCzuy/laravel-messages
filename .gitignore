@@ -1,0 +1,10 @@
+# ---- Ignore These Files Everywhere ---- #
+.DS_Store
+.env
+
+# ---- Ignore These Folders Everywhere ---- #
+backup/
+tmp/
+
+# ---- Ignore These Specific Folders ---- #
+/db_data/

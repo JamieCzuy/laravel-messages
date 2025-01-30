@@ -18,7 +18,48 @@ Jamie Czuy
 
 * Use Docker to avoid having to install / uninstall different tools and packages while trying different solutions.
 
-## Initial Commit
+## How to Run
+
+### Copy sample.env to .env and edit it
+
+Add project name and db passwords.
+The project name is used for grouping the docker containers.
+
+```bash
+cp sample.env .env
+```
+
+### Spin up MySql Server
+
+```bash
+docker compose up -d mysql-db
+```
+
+### TODO: Load the database with a dump
+
+```bash
+# docker compose run --rm load-test-data
+```
+
+### Spin up the App or run the Tests
+
+To run the Tests use this command
+
+```bash
+docker compose run --rm laravel-test
+```
+
+And to Spin up the App:
+
+```bash
+docker compose up -d laravel-app
+```
+
+### Test that app is running
+
+You can open [localhost](http://localhost:8000) in a browser to see that the app is running and available.
+
+## Notes on creating the Initial Commit
 
 These were the steps taken to create the initial commit: this is how the project folder was built.
 
@@ -26,8 +67,7 @@ See the Dockerfile and Compose.yml file for how these steps are defined.
 
 ### Create a .env file from sample.env
 
-bash
-```
+```bash
 cp sample.env .env
 ```
 

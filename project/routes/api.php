@@ -8,5 +8,3 @@ use App\Http\Controllers\Api\NewRegisteredUserController;
 Route::post('/register', [NewRegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');
-
-require __DIR__.'/auth.php';

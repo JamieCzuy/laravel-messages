@@ -21,16 +21,24 @@ class NewRegisteredUserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        
-        $validatedData = $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'password' => ['required', Rules\Password::defaults()],
-        ]);
+        Log::info(message: 'About to validate passed in request...');
 
-        Log::debug('>>> Storing User: ', $validatedData);
+        try {
+            $validatedData = $request->validate([
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', Rules\Password::defaults()],
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error_code' => 101,
+                'error_title' => 'Registration Failure',
+                'error_message' => $e->getMessage()
+            ], 400);
+        }
+
         $user = User::create([
             'first_name' => $validatedData['first_name'],
             'last_name' => $validatedData['last_name'],

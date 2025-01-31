@@ -1,0 +1,4 @@
+# ---- Ignore the json and html output files ---- #
+*.json
+*.html
+

@@ -26,6 +26,7 @@ services:
     image: base-php-image
     depends_on:
       - mysql-db
+      - base-image
     networks:
       - network
     volumes:

@@ -7,7 +7,7 @@ A simple backend for a message app written in PHP using the Laravel Framework
 * Author: Jamie Czuy
 * Hours Taken:
   * 16 hrs on initial commit (took a while to get familiar with PHP and Laravel and how to get them to work in Docker)
-  * 3 hrs on the actual assignment
+  * 12 hrs on the actual assignment
 
 Below are my notes on what was done and at the end there is a list of issues and suggestions.
 
@@ -35,12 +35,6 @@ cp sample.env .env
 docker compose up -d mysql-db
 ```
 
-### TODO: Load the database with a dump
-
-```bash
-# docker compose run --rm load-test-data
-```
-
 ### Spin up the App or run the Tests
 
 To run the Tests use this command
@@ -58,6 +52,15 @@ docker compose up -d laravel-app
 ### Test that app is running
 
 You can open [localhost](http://localhost:8000) in a browser to see that the app is running and available.
+
+### Run Curl Test to Register / Create a User
+
+```bash
+cd curl_test
+./register_a_user.sh
+```
+
+Look in the User table - the new user should be there
 
 ## Notes on creating the Initial Commit
 
